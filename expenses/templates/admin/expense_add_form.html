@@ -1,0 +1,46 @@
+<!-- expense/templates/admin/expense_add_form.html -->
+
+{% extends "admin/change_form.html" %}
+
+{% block after_related_objects %}
+  <label for="cameraInput">Scan Receipt:</label><br>
+  <input type="file" id="cameraInput" accept="image/*" capture="environment"><br><br>
+  <button type="button" onclick="scanReceipt()">Scan & Autofill</button><br><br>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+function scanReceipt() {
+  const input = document.getElementById('cameraInput');
+  if (!input.files.length) {
+    alert("Please select or capture an image.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('image', input.files[0]);
+
+  fetch('/api/scan-receipt/', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.items && data.items.length > 0) {
+      const match = /Description: (.*), Amount: (\d+(\.\d+)?)/.exec(data.items[0]);
+      if (match) {
+        document.getElementById('id_description').value = match[1];
+        document.getElementById('id_amount').value = match[2];
+      }
+    } else {
+      alert("No items extracted.");
+    }
+  })
+  .catch(error => {
+    console.error('OCR error:', error);
+    alert("OCR failed.");
+  });
+}
+</script>
+{% endblock %}
