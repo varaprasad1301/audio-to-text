@@ -6,3 +6,5 @@ paddlepaddle>=2.6.0
 paddleocr
 Pillow>=9.0.0
 numpy>=1.21
+
+
