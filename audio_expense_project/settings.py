@@ -28,7 +28,7 @@ DEBUG = False
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = []
-ALLOWED_HOSTS = ['3.94.187.199','localhost']
+ALLOWED_HOSTS = ['3.110.194.67','localhost']
 
 
 # Application definition
